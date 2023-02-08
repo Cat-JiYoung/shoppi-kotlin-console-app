@@ -1,5 +1,6 @@
 package screen
 
+import data.CartItems
 import data.Product
 
 class ShoppingProductList {
@@ -19,24 +20,56 @@ class ShoppingProductList {
         product.categoryLabel
     }
 
-    fun showProducts(seletedCategory: String) {
-        val categoryProducts = categories[seletedCategory]
+    fun showProducts(selectedCategory: String) {
+        val categoryProducts = categories[selectedCategory]
         if(!categoryProducts.isNullOrEmpty()){
             println("""
                 ***==============================***
-                선택하신 [$seletedCategory] 카테고리 상품입니다.
+                선택하신 [$selectedCategory] 카테고리 상품입니다.
             """.trimIndent()
             )
             val productSize = categoryProducts.size
-            for(index in 0 until productSize){
-                println("${index}. ${categoryProducts[index].name}")
+//            for(index in 0 until productSize){
+//                println("${index}. ${categoryProducts[index].name}")
+//            }
+            categoryProducts.forEachIndexed { index, product ->
+                println("${index}. ${product.name}")
             }
+            showCartOption(categoryProducts, selectedCategory)
         } else {
-            showEmptyProductMessage(seletedCategory)
+            showEmptyProductMessage(selectedCategory)
         }
     }
 
-    private fun showEmptyProductMessage(seletedCategory: String){
-        println("[$seletedCategory] 카테고리 상품이 등록되기 전입니다.")
+    private fun showCartOption(categoryProducts: List<Product>, selectedCategory: String) {
+        println(
+            """
+                ***============================**
+                장바구니에 담은 상품 번호를 선택헤주세요.
+            """.trimIndent()
+        )
+        // index를 입력받기 때문에 int로 변환하는 과정이 있고
+        // Int로 변경할 수 없는 값으로 입력했을 때는 null로 변환한다.
+        // selectedIndex가 nullable이 아니게끔 맨뒤에 !!를 써준다.
+        val selectedIndex = readLine()?.toIntOrNull()!!
+        // categoryProducts에 선택한 index가 있는지 확인 후 (getOrNull)
+        // 존재하면 그 product를 cartItems에 추가함
+        categoryProducts.getOrNull(selectedIndex)?.let { product ->
+            CartItems.addProduct(product)
+            println("=> 장바구니로 이동하시려면 #을, 계속 쇼핑하시려면 *을 입력해주세요")
+            val answer = readLine() // TODO: readLine()과 readLn() 차이 알아보기
+            if (answer == "#"){
+                val shoppingCart = ShoppingCart()
+                shoppingCart.showCartItems()
+            } else if(answer == "*"){
+                showProducts(selectedCategory)
+            } else {
+                // TODO 그 외 값을 입력한 경우에 대한 처리
+            }
+        }
+    }
+
+    private fun showEmptyProductMessage(selectedCategory: String){
+        println("[$selectedCategory] 카테고리 상품이 등록되기 전입니다.")
     }
 }
