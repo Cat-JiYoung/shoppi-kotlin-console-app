@@ -6,27 +6,30 @@ import data.Product
 import extensions.getNotEmptyInt
 import extensions.getNotEmptyString
 
-class ShoppingProductList {
+class ShoppingProductList : Screen() {
     private val products = arrayOf(
-        Product("패션","겨울 패딩"),
-        Product("패션","겨울 바지"),
-        Product("전자기기","핸드폰"),
-        Product("전자기기","블루투스 이어폰"),
-        Product("전자기기","노트북"),
-        Product("반려동물용품","간식사료"),
-        Product("반려동물용품","습식사료"),
-        Product("반려동물용품","치약"),
-        Product("반려동물용품","간식"),
+        Product("패션", "겨울 패딩"),
+        Product("패션", "겨울 바지"),
+        Product("전자기기", "핸드폰"),
+        Product("전자기기", "블루투스 이어폰"),
+        Product("전자기기", "노트북"),
+        Product("반려동물용품", "간식사료"),
+        Product("반려동물용품", "습식사료"),
+        Product("반려동물용품", "치약"),
+        Product("반려동물용품", "간식"),
     )
+
     // categoryLabel을 기준으로 유저가 쉽게 조회할 수 있도록 함
     private val categories: Map<String, List<Product>> = products.groupBy { product ->
         product.categoryLabel
     }
 
     fun showProducts(selectedCategory: String) {
+        ScreenStack.push(this) // 이 화면에 진입했다는걸 알려줌
         val categoryProducts = categories[selectedCategory]
-        if(!categoryProducts.isNullOrEmpty()){
-            println("""
+        if (!categoryProducts.isNullOrEmpty()) {
+            println(
+                """
                 $LINE_DIVIDER
                 선택하신 [$selectedCategory] 카테고리 상품입니다.
             """.trimIndent()
@@ -62,10 +65,10 @@ class ShoppingProductList {
             CartItems.addProduct(product)
             println("=> 장바구니로 이동하시려면 #을, 계속 쇼핑하시려면 *을 입력해주세요")
             val answer = readlnOrNull().getNotEmptyString() // TODO: readLine()과 readLn() 차이 알아보기
-            if (answer == "#"){
+            if (answer == "#") {
                 val shoppingCart = ShoppingCart()
                 shoppingCart.showCartItems()
-            } else if(answer == "*"){
+            } else if (answer == "*") {
                 showProducts(selectedCategory)
             } else {
                 // TODO 그 외 값을 입력한 경우에 대한 처리
@@ -73,7 +76,7 @@ class ShoppingProductList {
         }
     }
 
-    private fun showEmptyProductMessage(selectedCategory: String){
+    private fun showEmptyProductMessage(selectedCategory: String) {
         println("[$selectedCategory] 카테고리 상품이 등록되기 전입니다.")
     }
 }

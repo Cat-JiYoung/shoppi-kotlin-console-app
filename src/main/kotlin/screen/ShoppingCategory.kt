@@ -8,8 +8,9 @@ import extensions.getNotEmptyString
 2. 사용자 입력값 요청 처리 공통화
 3. 프로젝트 전역에서 참조하는 상수
  */
-class ShoppingCategory {
+class ShoppingCategory : Screen(){
     fun showCategories() {
+        ScreenStack.push(this)
         /*
         실습2
         1. 상품 카테고리 표기
