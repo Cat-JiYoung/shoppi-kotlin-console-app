@@ -2,6 +2,8 @@ package screen
 
 import data.CartItems
 import data.Product
+import extensions.getNotEmptyInt
+import extensions.getNotEmptyString
 
 class ShoppingProductList {
     private val products = arrayOf(
@@ -51,13 +53,13 @@ class ShoppingProductList {
         // index를 입력받기 때문에 int로 변환하는 과정이 있고
         // Int로 변경할 수 없는 값으로 입력했을 때는 null로 변환한다.
         // selectedIndex가 nullable이 아니게끔 맨뒤에 !!를 써준다.
-        val selectedIndex = readLine()?.toIntOrNull()!!
+        val selectedIndex = readlnOrNull().getNotEmptyInt()
         // categoryProducts에 선택한 index가 있는지 확인 후 (getOrNull)
         // 존재하면 그 product를 cartItems에 추가함
         categoryProducts.getOrNull(selectedIndex)?.let { product ->
             CartItems.addProduct(product)
             println("=> 장바구니로 이동하시려면 #을, 계속 쇼핑하시려면 *을 입력해주세요")
-            val answer = readLine() // TODO: readLine()과 readLn() 차이 알아보기
+            val answer = readlnOrNull().getNotEmptyString() // TODO: readLine()과 readLn() 차이 알아보기
             if (answer == "#"){
                 val shoppingCart = ShoppingCart()
                 shoppingCart.showCartItems()
