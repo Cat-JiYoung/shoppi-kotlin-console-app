@@ -1,5 +1,6 @@
 package screen
 
+import LINE_DIVIDER
 import data.CartItems
 import data.Product
 import extensions.getNotEmptyInt
@@ -26,7 +27,7 @@ class ShoppingProductList {
         val categoryProducts = categories[selectedCategory]
         if(!categoryProducts.isNullOrEmpty()){
             println("""
-                ***==============================***
+                $LINE_DIVIDER
                 선택하신 [$selectedCategory] 카테고리 상품입니다.
             """.trimIndent()
             )
@@ -44,9 +45,10 @@ class ShoppingProductList {
     }
 
     private fun showCartOption(categoryProducts: List<Product>, selectedCategory: String) {
+        // ===와 같은 구분자는 다른 파일에서도 공통적으로 쓰기 때문에 전역 상수로 따로 뺀다.
         println(
             """
-                ***============================**
+                $LINE_DIVIDER
                 장바구니에 담은 상품 번호를 선택헤주세요.
             """.trimIndent()
         )
